@@ -11,4 +11,5 @@ http://ultraist.hatenablog.com/entry/20110718/1310965532
 
 
 ・つかいかた
+
 exe にファイル突っ込め
