@@ -3,8 +3,6 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include <string>
-
 #pragma comment(lib, "comctl32.lib")
 
 // VC10用　適宜書き換えろ
@@ -41,10 +39,10 @@ cv::Mat gray, smallImg, img, showimg;
 int trackbar1 = 0;
 double scaleFactor = 1.05;
 int minNeighbors = 1;
+double scale = 4;
 
 void facedetect()
 {
-	double scale = 4;
 	scaleFactor = 1.5 - (trackbar1/255.0*0.5f-0.01);
 	std::vector<cv::Rect> faces;
 	cascade.detectMultiScale(smallImg, faces,
@@ -68,26 +66,20 @@ void onChange1(int val, void* ptr)
 	cv::imshow(window_name, showimg);
 }
 
-
-
 int main(int argc, char *argv[])
 {
 	const char *imagename = argc > 1 ? argv[1] : "37467262_p0.jpg";
-	std::string temp = "\"";
-	temp += imagename;
-	temp += "\"";
 	img = cv::imread(imagename, 1);
 	if(img.empty()) return -1; 
 
 	showimg = cv::Mat(img.clone());
 
-	double scale = 4;
 	smallImg = cv::Mat(cv::saturate_cast<int>(img.rows/scale), cv::saturate_cast<int>(img.cols/scale), CV_8UC1);
 	// グレースケール画像に変換
 	cv::cvtColor(img, gray, CV_BGR2GRAY);
 	// 処理時間短縮のために画像を縮小
 	cv::resize(gray, smallImg, smallImg.size(), 0, 0, cv::INTER_LINEAR);
-	cv::equalizeHist( smallImg, smallImg);
+	cv::equalizeHist(smallImg, smallImg);
 
 	// 分類器の読み込み
 	std::string cascadeName = "lbpcascade_animeface.xml";
